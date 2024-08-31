@@ -11,7 +11,7 @@
     const positionList = ['B', 'CO', 'HJ', 'LJ', 'UTG2', 'UTG1', 'UTG', 'BB', 'SB'];
 	let positions = ['B', 'CO', 'HJ', 'LJ', 'UTG2', 'UTG1', 'UTG', 'BB', 'SB'];
     const cards = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
-    const players = ['2', '3', '4', '5', '6', '7', '8', '9'];
+    const players = [2, 3, 4, 5, 6, 7, 8, 9];
 
     onMount(() => {
         const now = new Date();
