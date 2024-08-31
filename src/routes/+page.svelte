@@ -101,7 +101,6 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 20px;
-        /* background-color: #FF0000; */
         background-color: #f4f4f4;
     }
 
@@ -112,12 +111,6 @@
         background: #D3D3D3;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
     }
 
     .player-postion {
@@ -162,30 +155,14 @@
         margin-bottom: 5px;
     }
 
-    .player-info input,
-    .player-info select {
+    .player-info input 
+    {
         padding: 10px;
         font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
         width: 100%;
-    }
-
-    .player-info button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #28a745; /* Green color */
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    .player-info button:hover {
-        background-color: #218838;
     }
 
     .position-selection, .player-selection {
@@ -196,10 +173,6 @@
         list-style: none;
         padding: 0;
         margin: 0;
-    }
-
-    .position-selection li, .player-selection li {
-        margin-bottom: 10px;
     }
 
     .position-selection button, .player-selection button {
@@ -219,12 +192,7 @@
     }
 
     .position-selection button:hover, .player-selection button:hover {
-        /* background-color: #e2e6ea; */
         background-color: #007bff;
-    }
-
-    .card-selection {
-        margin-bottom: 20px;
     }
 
     .card-display {
@@ -232,35 +200,18 @@
         flex-direction: column;
         margin-bottom: 20px;
         align-items: center;
+        text-align: center;
+        background-color: #90EE90;
+        width: 100%;
     }
 
-    .card-info {
+    .position-player-info {
         margin-bottom: 10px;
         font-size: 18px;
         text-align: center;
         display: flex;
         align-items: center;
-    }
-
-    .card-info span {
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .card-info button {
-        margin-left: 10px;
-        padding: 5px 10px;
-        font-size: 14px;
-        border: 1px solid #007bff;
-        background-color: #fff;
-        color: #007bff;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .card-info button:hover {
-        background-color: #007bff;
-        color: #fff;
+    
     }
 
     .card-display span {
@@ -285,48 +236,18 @@
         background-color: #e2e6ea;
     }
 
-    .card-display .suited {
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .suited span {
-        margin-right: 10px;
-    }
-
-    .suited button {
-        padding: 10px 20px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #f8f9fa;
-        color: #007bff;
-        cursor: pointer;
-    }
-
-    .suited button.active {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .suited button:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .suited-row {
+.cards-suited {
     margin-bottom: 20px; /* Add space below the Suited row */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.suited-row span {
+.cards-suited span {
     margin-right: 10px;
 }
 
-.suited-row button {
+.cards-suited button {
     padding: 10px 20px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -336,7 +257,7 @@
     cursor: pointer;
 }
 
-.suited-row button.active {
+.cards-suited button.active {
     background-color: #007bff;
     color: #fff;
 }
@@ -374,18 +295,36 @@
     }
 </style>
 
+<!-- HH    HH   TTTTTTTT MM      MM LL       -->						
+<!-- HH    HH      TT    MMM    MMM LL       -->						
+<!-- HHHHHHHH      TT    MM MMMM MM LL       -->						
+<!-- HH    HH      TT    MM  MM  MM LL       -->						
+<!-- HH    HH      TT    MM  MM  MM LLLLLLLL -->						
+
 <div class="container">
+
+<!-- PPPPPPP    LL           AA     YY    YY  EEEEEEEE  RRRRRRR  -->						
+<!-- PP    PP   LL         AA  AA    YY  YY   EE        RR    RR -->						
+<!-- PPPPPPPP   LL        AAAAAAAA    YYYY    EEEEEE    RRRRRRR  -->						
+<!-- PP         LL        AA    AA     YY     EE        RR   RR  -->						
+<!-- PP         LLLLLLLL  AA    AA     YY     EEEEEEEE  RR    RR -->						
     {#if step === 1}
         <div class="player-info">
             <h2>Player Information</h2>
-            <label for="player">player:</label>
+            <label for="player">Player:</label>
             <input id="player" type="text" bind:value={player} />
-            <label for="venue">venue:</label>
+            <label for="venue">Venue:</label>
             <input id="venue" type="text" bind:value={venue} />
             <label for="date">Date:</label>
             <input id="date" type="date" bind:value={date} />
             <button class="confirm-button" on:click={confirmPlayerInfo}>Confirm</button>
         </div>
+
+<!-- PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN -->						
+<!-- PP    PP   OO    OO  SS           II        TT        II     OO    OO  NNN   NN -->						
+<!-- PPPPPPPP   OO    OO   SSSSSS      II        TT        II     OO    OO  NN NN NN -->						
+<!-- PP         OO    OO        SS     II        TT        II     OO    OO  NN  NNNN -->						
+<!-- PP          OOOOOO   SSSSSSS   IIIIIIII     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 2}
         <div class="player-postion">
             <div class="player-selection">
@@ -420,37 +359,49 @@
             </div>
         </div>
         <button class="confirm-button" on:click={confirmPlayerPosition}>Confirm</button>
+
+<!--  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS -->						
+<!-- CC          AA  AA   RR    RR  DD    DD  SS       -->						
+<!-- CC         AAAAAAAA  RRRRRRR   DD    DD   SSSSSS  -->						
+<!-- CC         AA    AA  RR   RR   DD    DD        SS -->						
+<!--  CCCCCCC   AA    AA  RR    RR  DDDDDD    SSSSSSS  -->						
     {:else if step === 3}
         <div>
-            <div class="card-info">
-                <span on:click={goToPositionAndPlayerSelection}>{position}</span>
-                <span on:click={goToPositionAndPlayerSelection}>{playerCount}</span>
+            <div class="position-player-info">
+                <div class="text-box" on:click={goToPositionAndPlayerScreen}>
+                    {position} | {playerCount}
+                </div>
             </div>
             <div class="card-display">
-                <div class="card-info">
-                    <span>{currentHand.card1 ?? ' '}</span>
-                    <span>{currentHand.card2 ?? ' '}</span>
-                    <span>{currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o'): ' '}</span>
-                </div>
-                <!-- Move Suited Section Here -->
-                <div class="suited-row">
-                    <span>Suited:</span>
-                    <button class={currentHand.suited ? 'active' : ''} on:click={toggleSuited}>
-                        {currentHand.suited ? 'Yes' : 'No'}
-                    </button>
-                </div>
-                <!-- Card Grid -->
-                <div class="card-grid">
-                    {#each cards as card}
-                        <button on:click={() => handleCardSelection(card)}>{card}</button>
-                    {/each}
-                </div>
-                <button class="confirm-button" on:click={confirmCardSelection}>Confirm</button>
+                <span>Hand: 
+                {currentHand.card1 ?? ' '}
+                {currentHand.card2 ?? ' '}
+                {currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o'): ' '}
+                </span>
             </div>
+            <div class="cards-suited">
+                <span>Suited:</span>
+                <button class={currentHand.suited ? 'active' : ''} on:click={toggleSuited}>
+                    {currentHand.suited ? 'Yes' : 'No'}
+                </button>
+            </div>
+            <!-- Card Grid -->
+            <div class="card-grid">
+                {#each cards as card}
+                    <button on:click={() => handleCardSelection(card)}>{card}</button>
+                {/each}
+            </div>
+            <button class="confirm-button" on:click={confirmCardSelection}>Confirm</button>
         </div>
+
+<!--    AA       CCCCCCC  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN -->						
+<!--  AA  AA    CC           TT        II     OO    OO  NNN   NN -->						
+<!-- AAAAAAAA   CC           TT        II     OO    OO  NN NN NN -->						
+<!-- AA    AA   CC           TT        II     OO    OO  NN  NNNN -->						
+<!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
         <div>
-            <div class="card-info">
+            <div class="position-player-info">
                 <div class="text-box" on:click={goToPositionAndPlayerScreen}>
                     {position} | {playerCount}
                 </div>
