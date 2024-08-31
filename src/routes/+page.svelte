@@ -31,7 +31,8 @@
 
     function handlePlayers(p) {
         playerCount = parseInt(p);
-		let positions = [];
+        // positions = positionList.slice(0, playerCount)
+		positions = [];
 		for (let i=0; i < playerCount; i++){
             positions.push(positionList[i]);
         }
@@ -40,9 +41,9 @@
         //     positions.push('UTG');
         // };
 
-        document.querySelectorAll('.player-selection button').forEach(btn => {
-            btn.classList.toggle('active', btn.textContent === p);
-        });
+        // document.querySelectorAll('.player-selection button').forEach(btn => {
+        //     btn.classList.toggle('active', btn.textContent === p);
+        // });
     }
 
     function confirmPlayerPosition() {
