@@ -8,8 +8,8 @@
     let currentHand = { suited: false, card1: null, card2: null };
     let position = '';
     let playerCount = 8;
-    const positionList = ['B', 'CO', 'HJ', 'LJ', 'UTG2', 'UTG1', 'UTG', 'BB', 'SB'];
-	let positions = ['B', 'CO', 'HJ', 'LJ', 'UTG2', 'UTG1', 'UTG', 'BB', 'SB'];
+    const positionList = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1', 'UTG2'];
+	let positions = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1'];
     const cards = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
     const players = [2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -33,17 +33,24 @@
         playerCount = parseInt(p);
         // positions = positionList.slice(0, playerCount)
 		positions = [];
-		for (let i=0; i < playerCount; i++){
+		for (let i=0; i < Math.min(6, playerCount); i++){
             positions.push(positionList[i]);
         }
 
-        // if (playerCount = 6) {
-        //     positions.push('UTG');
-        // };
+        if (playerCount === 7) {
+            positions.push('UTG');
+        };
 
-        // document.querySelectorAll('.player-selection button').forEach(btn => {
-        //     btn.classList.toggle('active', btn.textContent === p);
-        // });
+        if (playerCount === 8) {
+            positions.push('UTG1');
+            positions.push('UTG');
+        };
+
+        if (playerCount === 9) {
+            positions.push('UTG2');
+            positions.push('UTG1');
+            positions.push('UTG');
+        };
     }
 
     function confirmPlayerPosition() {
@@ -343,6 +350,7 @@
         border-radius: 4px;
         cursor: pointer;
         margin-top: 20px;
+        width: 100%;
     }
 
     .confirm-button:hover {
@@ -380,21 +388,6 @@
         </div>
     {:else if step === 2}
         <div class="player-postion">
-            <div class="position-selection">
-                <h2>Position</h2>
-                <ul>
-                    {#each positions as pos}
-                        <li>
-                            <button
-                                class={pos === position ? 'active' : ''}
-                                on:click={() => handlePosition(pos)}
-                            >
-                                {pos}
-                            </button>
-                        </li>
-                    {/each}
-                </ul>
-            </div>
             <div class="player-selection">
                 <h2>Players</h2>
                 <ul>
@@ -405,6 +398,21 @@
                                 on:click={() => handlePlayers(p)}
                             >
                                 {p}
+                            </button>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+            <div class="position-selection">
+                <h2>Position</h2>
+                <ul>
+                    {#each positions as pos}
+                        <li>
+                            <button
+                                class={pos === position ? 'active' : ''}
+                                on:click={() => handlePosition(pos)}
+                            >
+                                {pos}
                             </button>
                         </li>
                     {/each}
