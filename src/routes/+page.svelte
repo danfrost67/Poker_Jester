@@ -1,6 +1,10 @@
 <script>
+// JJJJJJJJ      AA     VV    VV     AA      SSSSSSS   CCCCCCC  RRRRRRR   IIIIIIII  PPPPPPP   TTTTTTTT 						
+//    JJ       AA  AA    VV  VV    AA  AA   SS        CC        RR    RR     II     PP    PP     TT    						
+//    JJ      AAAAAAAA   VV  VV   AAAAAAAA   SSSSSS   CC        RRRRRRR      II     PPPPPPPP     TT    						
+// J  JJ      AA    AA     VV     AA    AA        SS  CC        RR   RR      II     PP           TT    						
+//  JJJ       AA    AA     VV     AA    AA  SSSSSSS    CCCCCCC  RR    RR  IIIIIIII  PP           TT    						
     import { onMount } from 'svelte';
-
     let step = -1;
     let player = '';
     let venue = '';
@@ -31,23 +35,24 @@
 
     function confirmGameInfo() {
         // create a local storage key
-        const key = `${venue} - ${date}`;
+        const key = `${player} - ${venue} - ${date}`;
         // create a local storage value that is json 
         const value = JSON.stringify({ player, venue, date, handHistory });
         // set the key value pair in local storage
         localStorage.setItem(key, value);
-
         gameHistory.push(key);
-
         step = 2;
     }
 
+// LL          OOOOOO      AA     DDDDDD               GGGGGG      AA    MM      MM EEEEEEEE 						
+// LL         OO    OO   AA  AA   DD    DD            GG         AA  AA  MMM    MMM EE       						
+// LL         OO    OO  AAAAAAAA  DD    DD            GG   GGG  AAAAAAAA MM MMMM MM EEEEEE   						
+// LL         OO    OO  AA    AA  DD    DD            GG     G  AA    AA MM  MM  MM EE       						
+// LLLLLLLL    OOOOOO   AA    AA  DDDDDD               GGGGGG   AA    AA MM  MM  MM EEEEEEEE 						
     function loadGame(key) {
         const value = localStorage.getItem(key);
         const gameDetails = JSON.parse(value);
-
         console.log(gameDetails);
-
         player = gameDetails.player;
         venue = gameDetails.venue;
         date = gameDetails.date;
@@ -55,6 +60,11 @@
         step = 4;
     }
 
+// PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN 						
+// PP    PP   OO    OO  SS           II        TT        II     OO    OO  NNN   NN 						
+// PPPPPPPP   OO    OO   SSSSSS      II        TT        II     OO    OO  NN NN NN 						
+// PP         OO    OO        SS     II        TT        II     OO    OO  NN  NNNN 						
+// PP          OOOOOO   SSSSSSS   IIIIIIII     TT     IIIIIIII   OOOOOO   NN    NN 						    
     function handlePosition(pos) {
         position = pos;
         document.querySelectorAll('.position-selection button').forEach(btn => {
@@ -62,6 +72,11 @@
         });
     }
 
+// PPPPPPP    LL           AA     YY    YY  EEEEEEEE  RRRRRRR    SSSSSSS 						
+// PP    PP   LL         AA  AA    YY  YY   EE        RR    RR  SS       						
+// PPPPPPPP   LL        AAAAAAAA    YYYY    EEEEEE    RRRRRRR    SSSSSS  						
+// PP         LL        AA    AA     YY     EE        RR   RR         SS 						
+// PP         LLLLLLLL  AA    AA     YY     EEEEEEEE  RR    RR  SSSSSSS  						    
     function handlePlayers(p) {
         playerCount = parseInt(p);
 		positions = [];
@@ -85,6 +100,16 @@
         };
     }
 
+    function confirmPlayerPosition() {
+        step = 3;
+    }
+
+
+//  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS 						
+// CC          AA  AA   RR    RR  DD    DD  SS       						
+// CC         AAAAAAAA  RRRRRRR   DD    DD   SSSSSS  						
+// CC         AA    AA  RR   RR   DD    DD        SS 						
+//  CCCCCCC   AA    AA  RR    RR  DDDDDD    SSSSSSS  						
     function handleCardSelection(card) {
         if (!currentHand.card1) {
             currentHand.card1 = card;
@@ -107,10 +132,6 @@
         }
     }
 
-    function goToPositionAndPlayerSelection() {
-        step = 2;
-    }
-
     function confirmCardSelection() {
         handHistory.push({
             position: position,
@@ -119,6 +140,31 @@
             card2: currentHand.card2,
             suited: currentHand.suited
         });
+
+// JJJJJJJJ   UU    UU MM      MM PPPPPPP             PPPPPPP      AA      GGGGGG   EEEEEEEE 						
+//    JJ      UU    UU MMM    MMM PP    PP            PP    PP   AA  AA   GG        EE       						
+//    JJ      UU    UU MM MMMM MM PPPPPPPP            PPPPPPPP  AAAAAAAA  GG   GGG  EEEEEE   						
+// J  JJ      UU    UU MM  MM  MM PP                  PP        AA    AA  GG     G  EE       						
+//  JJJ        UUUUUU  MM  MM  MM PP                  PP        AA    AA   GGGGGG   EEEEEEEE 						    
+    function goToPositionAndPlayerSelection() {
+        step = 2;
+    }
+
+    function confirmPlayerPosition() {
+        step = 3;
+    }
+
+    function goToCardSelectionScreen() {
+        // if there is no position or player count selected, go back to the position and player selection screen
+        if (!position || !playerCount) {
+            step = 2;
+        }
+        step = 3;
+    }
+
+    function goToPositionAndPlayerScreen() {
+        step = 2;
+    }
 
         // update the game in local storage
         const key = `${venue} - ${date}`;
@@ -131,25 +177,16 @@
         step = 4;
     }
 
-    function confirmPlayerPosition() {
-        step = 3;
-    }
 
-    function goToCardSelectionScreen() {
-        // if there is no position or player count selected, go back to the position and player selection screen
-        if (!position || !playerCount) {
-            step = 2;
-        }
-
-        step = 3;
-    }
-
-    function goToPositionAndPlayerScreen() {
-        step = 2;
-    }
 </script>
 
 <style>
+/*  CCCCCCC    SSSSSSS   SSSSSSS */						
+/* CC         SS        SS       */						
+/* CC          SSSSSS    SSSSSS  */						
+/* CC               SS        SS */						
+/*  CCCCCCC   SSSSSSS   SSSSSSS  */						
+
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -166,35 +203,43 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .player-postion {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+    .confirm-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #28a745; /* Green color */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20px;
+        width: 100%;
     }
 
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+    .confirm-button:hover {
+        background-color: #218838;
     }
 
-    .card-grid button {
-        padding: 20px;
-        font-size: 24px;
-        border: 1px solid #007bff;
+    .text-box {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
         border-radius: 4px;
         background-color: #f8f9fa;
-        color: #007bff;
+        margin-bottom: 20px;
         cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 100%;
+        text-align: center;
     }
 
-    .card-grid button:hover{
-        background-color: #007bff;
-        color: #fff;
+    .text-box:hover {
+        background-color: #e2e6ea;
     }
+
+/*  SSSSSSS   EEEEEEEE   SSSSSSS   SSSSSSS  IIIIIIII   OOOOOO   NN    NN */						
+/* SS         EE        SS        SS           II     OO    OO  NNN   NN */						
+/*  SSSSSS    EEEEEE     SSSSSS    SSSSSS      II     OO    OO  NN NN NN */						
+/*       SS   EE              SS        SS     II     OO    OO  NN  NNNN */						
+/* SSSSSSS    EEEEEEEE  SSSSSSS   SSSSSSS   IIIIIIII   OOOOOO   NN    NN */						
 
     .player-info {
         display: flex;
@@ -215,6 +260,17 @@
         border-radius: 4px;
         box-sizing: border-box;
         width: 100%;
+    }
+
+/* PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN */						
+/* PP    PP   OO    OO  SS           II        TT        II     OO    OO  NNN   NN */						
+/* PPPPPPPP   OO    OO   SSSSSS      II        TT        II     OO    OO  NN NN NN */						
+/* PP         OO    OO        SS     II        TT        II     OO    OO  NN  NNNN */						
+/* PP          OOOOOO   SSSSSSS   IIIIIIII     TT     IIIIIIII   OOOOOO   NN    NN */						    
+    .player-postion {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
     .position-selection, .player-selection {
@@ -247,6 +303,43 @@
         background-color: #007bff;
     }
 
+    .position-player-info {
+        margin-bottom: 10px;
+        font-size: 18px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+    }
+
+/*  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS */						
+/* CC          AA  AA   RR    RR  DD    DD  SS       */						
+/* CC         AAAAAAAA  RRRRRRR   DD    DD   SSSSSS  */						
+/* CC         AA    AA  RR   RR   DD    DD        SS */						
+/*  CCCCCCC   AA    AA  RR    RR  DDDDDD    SSSSSSS  */						
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .card-grid button {
+        padding: 20px;
+        font-size: 24px;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        color: #007bff;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-grid button:hover{
+        background-color: #007bff;
+        color: #fff;
+    }
+
     .card-display {
         display: flex;
         flex-direction: column;
@@ -257,13 +350,6 @@
         width: 100%;
     }
 
-    .position-player-info {
-        margin-bottom: 10px;
-        font-size: 18px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-    }
 
     .card-info span {
         display: inline-block;
@@ -318,37 +404,7 @@
     color: #fff;
 }
 
-    .confirm-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #28a745; /* Green color */
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 20px;
-        width: 100%;
-    }
 
-    .confirm-button:hover {
-        background-color: #218838;
-    }
-
-    .text-box {
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #f8f9fa;
-        margin-bottom: 20px;
-        cursor: pointer;
-        width: 100%;
-        text-align: center;
-    }
-
-    .text-box:hover {
-        background-color: #e2e6ea;
-    }
 </style>
 
 <!-- HH    HH   TTTTTTTT MM      MM LL       -->						
