@@ -141,6 +141,18 @@
             suited: currentHand.suited
         });
 
+        // update the game in local storage
+        const key = `${venue} - ${date}`;
+        const value = JSON.stringify({ player, venue, date, handHistory });
+        localStorage
+            .setItem(key, value);
+
+        currentHand = { suited: false, card1: null, card2: null };
+
+        step = 4;
+
+    }   
+
 // JJJJJJJJ   UU    UU MM      MM PPPPPPP             PPPPPPP      AA      GGGGGG   EEEEEEEE 						
 //    JJ      UU    UU MMM    MMM PP    PP            PP    PP   AA  AA   GG        EE       						
 //    JJ      UU    UU MM MMMM MM PPPPPPPP            PPPPPPPP  AAAAAAAA  GG   GGG  EEEEEE   						
@@ -148,10 +160,6 @@
 //  JJJ        UUUUUU  MM  MM  MM PP                  PP        AA    AA   GGGGGG   EEEEEEEE 						    
     function goToPositionAndPlayerSelection() {
         step = 2;
-    }
-
-    function confirmPlayerPosition() {
-        step = 3;
     }
 
     function goToCardSelectionScreen() {
@@ -164,17 +172,6 @@
 
     function goToPositionAndPlayerScreen() {
         step = 2;
-    }
-
-        // update the game in local storage
-        const key = `${venue} - ${date}`;
-        const value = JSON.stringify({ player, venue, date, handHistory });
-        localStorage
-            .setItem(key, value);
-
-        currentHand = { suited: false, card1: null, card2: null };
-
-        step = 4;
     }
 
 
@@ -301,6 +298,7 @@
 
     .position-selection button:hover, .player-selection button:hover {
         background-color: #007bff;
+        color: #fff;
     }
 
     .position-player-info {
