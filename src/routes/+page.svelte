@@ -12,8 +12,11 @@
     let currentHand = { suited: false, card1: null, card2: null };
     let position = '';
     let playerCount = 8;
+    let toCall = 2;
+    let myAction = 'Fold';
     const positionList = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1', 'UTG2'];
 	let positions = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1'];
+    let actions = ['Fold', 'Call', 'Raise'];
     const cards = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
     const players = [2, 3, 4, 5, 6, 7, 8, 9];
     let handHistory = [];
@@ -138,6 +141,10 @@
     }
 
     function confirmCardSelection() {
+        step = 4;
+    }
+
+    function confirmAction() {
         handHistory.push({
             position: position,
             playerCount: playerCount,
@@ -154,16 +161,22 @@
 
         currentHand = { suited: false, card1: null, card2: null };
 
-        step = 4;
+        step = 5;
 
     }   
+
+    function handleAction(action) {
+        myAction = action;
+    }
+
 
 // JJJJJJJJ   UU    UU MM      MM PPPPPPP             PPPPPPP      AA      GGGGGG   EEEEEEEE 						
 //    JJ      UU    UU MMM    MMM PP    PP            PP    PP   AA  AA   GG        EE       						
 //    JJ      UU    UU MM MMMM MM PPPPPPPP            PPPPPPPP  AAAAAAAA  GG   GGG  EEEEEE   						
 // J  JJ      UU    UU MM  MM  MM PP                  PP        AA    AA  GG     G  EE       						
 //  JJJ        UUUUUU  MM  MM  MM PP                  PP        AA    AA   GGGGGG   EEEEEEEE 						    
-    function goToPositionAndPlayerSelection() {
+
+    function goToPositionAndPlayerScreen() {
         step = 2;
     }
 
@@ -174,11 +187,6 @@
         }
         step = 3;
     }
-
-    function goToPositionAndPlayerScreen() {
-        step = 2;
-    }
-
 
 </script>
 
@@ -407,6 +415,27 @@
     color: #fff;
 }
 
+/*    AA       CCCCCCC  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN */						
+/*  AA  AA    CC           TT        II     OO    OO  NNN   NN */						
+/* AAAAAAAA   CC           TT        II     OO    OO  NN NN NN */						
+/* AA    AA   CC           TT        II     OO    OO  NN  NNNN */						
+/* AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN */						
+
+.action button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #007bff;
+    cursor: pointer;
+    width: 100%;
+}
+
+.toCall {
+    font-size: 24px;
+}
+
 
 </style>
 
@@ -531,7 +560,7 @@
 <!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
     <div>
-        <p>Jacob</p>
+        <p>ACTION</p>
         <div class="position-player-info">
             <div class="text-box" on:click={goToPositionAndPlayerScreen}>
                 {position} | {playerCount}
@@ -544,8 +573,21 @@
                 {currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o'): ' '}
             </div>
         </div>
+        <div class = "toCall">
+            <label for="toCall">To call:</label>
+            <input id="toCall" type="text" bind:value={toCall} />
+        </div>
+        <div class="action">
+            <span>Action:</span>
+            {#each actions as action}
+                <button on:click={() => handleAction(action)}>{action}</button>
+            {/each}
 
-        <button class="confirm-button" on:click={goToCardSelectionScreen}>Add Another Hand</button>
+        </div>
+
+
+
+        <button class="confirm-button" on:click={confirmAction}>Confirm</button>
     </div>
 
 <!-- HH    HH   IIIIIIII   SSSSSSS  TTTTTTTT   OOOOOO   RRRRRRR   YY    YY -->						
