@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
-    let step = 1;
+    let step = -1;
     let player = '';
     let venue = '';
     let date = '';
@@ -12,14 +12,47 @@
 	let positions = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1'];
     const cards = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
     const players = [2, 3, 4, 5, 6, 7, 8, 9];
+    let handHistory = [];
+    let gameHistory = [];
 
     onMount(() => {
         const now = new Date();
         date = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+        for (let i = 0; i < localStorage.length; i++) {
+            // Get the key at position i
+            const key = localStorage.key(i);
+            // Print the key to the console
+            gameHistory.push(key);
+            console.log(key);
+        }
+        step = 0;
     });
 
-    function confirmPlayerInfo() {
+    function confirmGameInfo() {
+        // create a local storage key
+        const key = `${venue} - ${date}`;
+        // create a local storage value that is json 
+        const value = JSON.stringify({ player, venue, date, handHistory });
+        // set the key value pair in local storage
+        localStorage.setItem(key, value);
+
+        gameHistory.push(key);
+
         step = 2;
+    }
+
+    function loadGame(key) {
+        const value = localStorage.getItem(key);
+        const gameDetails = JSON.parse(value);
+
+        console.log(gameDetails);
+
+        player = gameDetails.player;
+        venue = gameDetails.venue;
+        date = gameDetails.date;
+        handHistory = gameDetails.handHistory ?? [];
+        step = 4;
     }
 
     function handlePosition(pos) {
@@ -31,7 +64,6 @@
 
     function handlePlayers(p) {
         playerCount = parseInt(p);
-        // positions = positionList.slice(0, playerCount)
 		positions = [];
 		for (let i=0; i < Math.min(6, playerCount); i++){
             positions.push(positionList[i]);
@@ -51,10 +83,6 @@
             positions.push('UTG1');
             positions.push('UTG');
         };
-    }
-
-    function confirmPlayerPosition() {
-        step = 3;
     }
 
     function handleCardSelection(card) {
@@ -84,15 +112,40 @@
     }
 
     function confirmCardSelection() {
+        handHistory.push({
+            position: position,
+            playerCount: playerCount,
+            card1: currentHand.card1,
+            card2: currentHand.card2,
+            suited: currentHand.suited
+        });
+
+        // update the game in local storage
+        const key = `${venue} - ${date}`;
+        const value = JSON.stringify({ player, venue, date, handHistory });
+        localStorage
+            .setItem(key, value);
+
+        currentHand = { suited: false, card1: null, card2: null };
+
         step = 4;
+    }
+
+    function confirmPlayerPosition() {
+        step = 3;
+    }
+
+    function goToCardSelectionScreen() {
+        // if there is no position or player count selected, go back to the position and player selection screen
+        if (!position || !playerCount) {
+            step = 2;
+        }
+
+        step = 3;
     }
 
     function goToPositionAndPlayerScreen() {
         step = 2;
-    }
-
-    function goToCardSelectionScreen() {
-        step = 3;
     }
 </script>
 
@@ -138,8 +191,7 @@
         align-items: center;
     }
 
-    .card-grid button:hover,
-    .card-grid button.active {
+    .card-grid button:hover{
         background-color: #007bff;
         color: #fff;
     }
@@ -211,7 +263,11 @@
         text-align: center;
         display: flex;
         align-items: center;
-    
+    }
+
+    .card-info span {
+        display: inline-block;
+        margin-right: 10px;
     }
 
     .card-display span {
@@ -303,12 +359,27 @@
 
 <div class="container">
 
+<!-- Game History-->
+
+    {#if step === 0}
+    <div class="player-info">
+
+        {#each gameHistory as game}
+        <button class="card-info" on:click={() => loadGame(game)}>
+            {game}
+        </button>
+        {/each}
+
+        <button class="confirm-button" on:click={() => step = 1}>Add New Game</button>
+    </div>
+
 <!-- PPPPPPP    LL           AA     YY    YY  EEEEEEEE  RRRRRRR  -->						
 <!-- PP    PP   LL         AA  AA    YY  YY   EE        RR    RR -->						
 <!-- PPPPPPPP   LL        AAAAAAAA    YYYY    EEEEEE    RRRRRRR  -->						
 <!-- PP         LL        AA    AA     YY     EE        RR   RR  -->						
 <!-- PP         LLLLLLLL  AA    AA     YY     EEEEEEEE  RR    RR -->						
-    {#if step === 1}
+    {:else if step === 1}
+
         <div class="player-info">
             <h2>Player Information</h2>
             <label for="player">Player:</label>
@@ -317,7 +388,7 @@
             <input id="venue" type="text" bind:value={venue} />
             <label for="date">Date:</label>
             <input id="date" type="date" bind:value={date} />
-            <button class="confirm-button" on:click={confirmPlayerInfo}>Confirm</button>
+            <button class="confirm-button" on:click={confirmGameInfo}>Confirm</button>
         </div>
 
 <!-- PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN -->						
@@ -401,14 +472,15 @@
 <!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
         <div>
-            <div class="position-player-info">
-                <div class="text-box" on:click={goToPositionAndPlayerScreen}>
-                    {position} | {playerCount}
-                </div>
-                <div class="text-box" on:click={goToCardSelectionScreen}>
-                    {currentHand.card1 ?? ' '}, {currentHand.card2 ?? ' '}, Suited: {currentHand.suited ? 'Yes' : 'No'}
+            {#each handHistory as hand}
+
+            <div class="card-info">
+                <div class="text-box">
+                    Pos: {hand.position}  Count: {hand.playerCount}  C1: {hand.card1 ?? ' '} C2: {hand.card2 ?? ' '} Suited: {hand.suited ? 'Yes' : 'No'}
                 </div>
             </div>
+            {/each}
+            <button class="confirm-button" on:click={goToCardSelectionScreen}>Add Another Hand</button>
         </div>
     {/if}
 </div>
