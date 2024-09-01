@@ -525,6 +525,29 @@
 <!-- AA    AA   CC           TT        II     OO    OO  NN  NNNN -->						
 <!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
+    <div>
+        <div class="position-player-info">
+            <div class="text-box" on:click={goToPositionAndPlayerScreen}>
+                {position} | {playerCount}
+            </div>
+        </div>
+        <div class="position-player-info">
+            <div class="text-box" on:click={goToCardSelectionScreen}>
+                {currentHand.card1 ?? ' '}
+                {currentHand.card2 ?? ' '}
+                {currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o'): ' '}
+            </div>
+        </div>
+
+        <button class="confirm-button" on:click={goToCardSelectionScreen}>Add Another Hand</button>
+    </div>
+
+<!-- HH    HH   IIIIIIII   SSSSSSS  TTTTTTTT   OOOOOO   RRRRRRR   YY    YY -->						
+<!-- HH    HH      II     SS           TT     OO    OO  RR    RR   YY  YY  -->						
+<!-- HHHHHHHH      II      SSSSSS      TT     OO    OO  RRRRRRR     YYYY   -->						
+<!-- HH    HH      II           SS     TT     OO    OO  RR   RR      YY    -->						
+<!-- HH    HH   IIIIIIII  SSSSSSS      TT      OOOOOO   RR    RR     YY    -->						
+    {:else if step === 5}
         <div>
             {#each handHistory as hand}
 
