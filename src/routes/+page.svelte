@@ -21,7 +21,12 @@
 
     onMount(() => {
         const now = new Date();
-        date = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1; // JavaScript months are 0-indexed
+        const day = now.getDate();
+
+        date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
         for (let i = 0; i < localStorage.length; i++) {
             // Get the key at position i
@@ -142,7 +147,7 @@
         });
 
         // update the game in local storage
-        const key = `${venue} - ${date}`;
+        const key = `${player} - ${venue} - ${date}`;
         const value = JSON.stringify({ player, venue, date, handHistory });
         localStorage
             .setItem(key, value);
@@ -526,6 +531,7 @@
 <!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
     <div>
+        <p>Jacob</p>
         <div class="position-player-info">
             <div class="text-box" on:click={goToPositionAndPlayerScreen}>
                 {position} | {playerCount}
