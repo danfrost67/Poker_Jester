@@ -197,13 +197,6 @@
 /* CC               SS        SS */						
 /*  CCCCCCC   SSSSSSS   SSSSSSS  */						
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f4f4f4;
-    }
-
     .container {
         max-width: 900px;
         margin: auto;
@@ -211,58 +204,29 @@
         background: #D3D3D3;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+
     }
 
-    .confirm-button {
+    .container button {
         padding: 10px 20px;
-        font-size: 16px;
-        background-color: #28a745; /* Green color */
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 20px;
-        width: 100%;
-    }
-
-    .confirm-button:hover {
-        background-color: #218838;
-    }
-
-    .text-box {
-        padding: 10px;
         font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 4px;
         background-color: #f8f9fa;
-        margin-bottom: 20px;
+        color: #007bff;
         cursor: pointer;
         width: 100%;
-        text-align: center;
     }
 
-    .text-box:hover {
-        background-color: #e2e6ea;
-    }
-
-/*  SSSSSSS   EEEEEEEE   SSSSSSS   SSSSSSS  IIIIIIII   OOOOOO   NN    NN */						
-/* SS         EE        SS        SS           II     OO    OO  NNN   NN */						
-/*  SSSSSS    EEEEEE     SSSSSS    SSSSSS      II     OO    OO  NN NN NN */						
-/*       SS   EE              SS        SS     II     OO    OO  NN  NNNN */						
-/* SSSSSSS    EEEEEEEE  SSSSSSS   SSSSSSS   IIIIIIII   OOOOOO   NN    NN */						
-
-    .player-info {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-    }
-
-    .player-info label {
+    .container label {
         font-weight: bold;
         margin-bottom: 5px;
     }
 
-    .player-info input 
+    .container input 
     {
         padding: 10px;
         font-size: 16px;
@@ -270,6 +234,29 @@
         border-radius: 4px;
         box-sizing: border-box;
         width: 100%;
+    }
+
+    .container ul, li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .confirm button{
+        background-color: #28a745;
+        color: #000000;
+    }
+
+    .text-box {
+        padding: 10px;
+        font-size: 24px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        margin-bottom: 20px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
     }
 
 /* PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN */						
@@ -283,43 +270,9 @@
         gap: 20px;
     }
 
-    .position-selection, .player-selection {
-        margin-bottom: 20px;
-    }
-
-    .position-selection ul, .player-selection ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .position-selection button, .player-selection button {
-        padding: 10px;
-        font-size: 16px;
-        width: 100%;
-        border: 1px solid #007bff;
-        border-radius: 4px;
-        background-color: #f8f9fa;
-        color: #007bff;
-        cursor: pointer;
-    }
-
     .position-selection button.active, .player-selection button.active {
         background-color: #007bff;
         color: #fff;
-    }
-
-    .position-selection button:hover, .player-selection button:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .position-player-info {
-        margin-bottom: 10px;
-        font-size: 18px;
-        text-align: center;
-        display: flex;
-        align-items: center;
     }
 
 /*  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS */						
@@ -333,7 +286,7 @@
         gap: 10px;
     }
 
-    .card-grid button {
+    /* .card-grid button {
         padding: 20px;
         font-size: 24px;
         border: 1px solid #007bff;
@@ -349,9 +302,9 @@
     .card-grid button:hover{
         background-color: #007bff;
         color: #fff;
-    }
+    } */
 
-    .card-display {
+    /* .card-display {
         display: flex;
         flex-direction: column;
         margin-bottom: 20px;
@@ -390,7 +343,7 @@
     }
 
 .cards-suited {
-    margin-bottom: 20px; /* Add space below the Suited row */
+    margin-bottom: 20px; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -413,29 +366,7 @@
 .cards-suited button.active {
     background-color: #007bff;
     color: #fff;
-}
-
-/*    AA       CCCCCCC  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN */						
-/*  AA  AA    CC           TT        II     OO    OO  NNN   NN */						
-/* AAAAAAAA   CC           TT        II     OO    OO  NN NN NN */						
-/* AA    AA   CC           TT        II     OO    OO  NN  NNNN */						
-/* AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN */						
-
-.action button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-    color: #007bff;
-    cursor: pointer;
-    width: 100%;
-}
-
-.toCall {
-    font-size: 24px;
-}
-
+} */
 
 </style>
 
@@ -457,8 +388,9 @@
             {game}
         </button>
         {/each}
-
-        <button class="confirm-button" on:click={() => step = 1}>Add New Game</button>
+        <div class = "confirm">
+            <button class="confirm-button" on:click={() => step = 1}>Add New Game</button>
+        </div>
     </div>
 
 <!-- PPPPPPP    LL           AA     YY    YY  EEEEEEEE  RRRRRRR  -->						
@@ -476,7 +408,9 @@
             <input id="venue" type="text" bind:value={venue} />
             <label for="date">Date:</label>
             <input id="date" type="date" bind:value={date} />
+        <div class = "confirm">
             <button class="confirm-button" on:click={confirmGameInfo}>Confirm</button>
+        </div>
         </div>
 
 <!-- PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN -->						
@@ -517,7 +451,9 @@
                 </ul>
             </div>
         </div>
-        <button class="confirm-button" on:click={confirmPlayerPosition}>Confirm</button>
+        <div class = "confirm">
+            <button class="confirm-button" on:click={confirmPlayerPosition}>Confirm</button>
+        </div>
 
 <!--  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS -->						
 <!-- CC          AA  AA   RR    RR  DD    DD  SS       -->						
@@ -550,7 +486,9 @@
                     <button on:click={() => handleCardSelection(card)}>{card}</button>
                 {/each}
             </div>
-            <button class="confirm-button" on:click={confirmCardSelection}>Confirm</button>
+            <div class = "confirm">
+                <button class="confirm-button" on:click={confirmCardSelection}>Confirm</button>
+            </div>
         </div>
 
 <!--    AA       CCCCCCC  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN -->						
@@ -560,7 +498,7 @@
 <!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->						
     {:else if step === 4}
     <div>
-        <p>ACTION</p>
+        <!-- <p>ACTION</p> -->
         <div class="position-player-info">
             <div class="text-box" on:click={goToPositionAndPlayerScreen}>
                 {position} | {playerCount}
@@ -586,8 +524,9 @@
         </div>
 
 
-
-        <button class="confirm-button" on:click={confirmAction}>Confirm</button>
+        <div class = "confirm">
+            <button class="confirm-button" on:click={confirmAction}>Confirm</button>
+        </div>
     </div>
 
 <!-- HH    HH   IIIIIIII   SSSSSSS  TTTTTTTT   OOOOOO   RRRRRRR   YY    YY -->						
