@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
 	// JJJJJJJJ      AA     VV    VV     AA      SSSSSSS   CCCCCCC  RRRRRRR   IIIIIIII  PPPPPPP   TTTTTTTT
 	//    JJ       AA  AA    VV  VV    AA  AA   SS        CC        RR    RR     II     PP    PP     TT
 	//    JJ      AAAAAAAA   VV  VV   AAAAAAAA   SSSSSS   CC        RRRRRRR      II     PPPPPPPP     TT
@@ -13,6 +15,9 @@
 	let position = '';
 	let playerCount = 8;
 	let toCall = 2;
+	let SB = 1;
+	let BB = 2;
+	let raiseAmount = 6;
 	let myAction = 'Fold';
 	const positionList = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1', 'UTG2'];
 	let positions = ['B', 'BB', 'SB', 'CO', 'HJ', 'LJ', 'UTG', 'UTG1'];
@@ -24,17 +29,12 @@
 
 	onMount(() => {
 		const now = new Date();
-
 		const year = now.getFullYear();
 		const month = now.getMonth() + 1; // JavaScript months are 0-indexed
 		const day = now.getDate();
-
 		date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-
 		for (let i = 0; i < localStorage.length; i++) {
-			// Get the key at position i
 			const key = localStorage.key(i);
-			// Print the key to the console
 			gameHistory.push(key);
 			console.log(key);
 		}
@@ -42,11 +42,8 @@
 	});
 
 	function confirmGameInfo() {
-		// create a local storage key
 		const key = `${player} - ${venue} - ${date}`;
-		// create a local storage value that is json
 		const value = JSON.stringify({ player, venue, date, handHistory });
-		// set the key value pair in local storage
 		localStorage.setItem(key, value);
 		gameHistory.push(key);
 		step = 2;
@@ -69,14 +66,10 @@
 	}
 
     function deleteGame(key) {
-
-        // confirm that the user wants to delete the game
         if (!confirm('Are you sure you want to delete this game?')) {
             return;
         }
-
         localStorage.removeItem(key);
-
         gameHistory = gameHistory.filter((game) => game !== key);
     }
 
@@ -103,16 +96,13 @@
 		for (let i = 0; i < Math.min(6, playerCount); i++) {
 			positions.push(positionList[i]);
 		}
-
 		if (playerCount === 7) {
 			positions.push('UTG');
 		}
-
 		if (playerCount === 8) {
 			positions.push('UTG1');
 			positions.push('UTG');
 		}
-
 		if (playerCount === 9) {
 			positions.push('UTG2');
 			positions.push('UTG1');
@@ -140,7 +130,8 @@
 	}
 
 	function toggleSuited() {
-		currentHand.suited = !currentHand.suited;
+		if (currentHand.suited = 'Suited') {'Offsuit'}
+			else {'Suited'}
 	}
 
 	function undoLastCardSelection() {
@@ -156,6 +147,15 @@
 	}
 
 	function confirmAction() {
+		step = 5;
+	}
+
+	function handleAction(action) {
+		myAction = action;
+	}
+
+	function updateLocalStorage() {
+		// update the game in local storage
 		handHistory.push({
 			position: position,
 			playerCount: playerCount,
@@ -163,19 +163,11 @@
 			card2: currentHand.card2,
 			suited: currentHand.suited
 		});
-
-		// update the game in local storage
 		const key = `${player} - ${venue} - ${date}`;
 		const value = JSON.stringify({ player, venue, date, handHistory });
 		localStorage.setItem(key, value);
 
 		currentHand = { suited: false, card1: null, card2: null };
-
-		step = 5;
-	}
-
-	function handleAction(action) {
-		myAction = action;
 	}
 
 	// JJJJJJJJ   UU    UU MM      MM PPPPPPP             PPPPPPP      AA      GGGGGG   EEEEEEEE
@@ -184,16 +176,20 @@
 	// J  JJ      UU    UU MM  MM  MM PP                  PP        AA    AA  GG     G  EE
 	//  JJJ        UUUUUU  MM  MM  MM PP                  PP        AA    AA   GGGGGG   EEEEEEEE
 
-	function goToPositionAndPlayerScreen() {
+	function goToPositionAndPlayer() {
 		step = 2;
 	}
 
-	function goToCardSelectionScreen() {
+	function goToCardSelection() {
 		// if there is no position or player count selected, go back to the position and player selection screen
 		if (!position || !playerCount) {
 			step = 2;
 		}
 		step = 3;
+	}
+
+	function goToAction() {
+		step = 4;
 	}
 </script>
 
@@ -250,6 +246,19 @@
 		<!-- PP         OO    OO        SS     II        TT        II     OO    OO  NN  NNNN -->
 		<!-- PP          OOOOOO   SSSSSSS   IIIIIIII     TT     IIIIIIII   OOOOOO   NN    NN -->
 	{:else if step === 2}
+		<div class="entry-display">
+			<span>
+				{playerCount ?? ' '} players | {position ?? ' '}  |  {SB}/{BB}
+			</span>
+		</div>
+		<div class="Blinds">
+			<div class="side-by-side">
+				<label for="Blinds">Blinds:</label>
+				<input id="SB" type="text" bind:value={SB} />
+				<span> / </span>
+				<input id="BB" type="text" bind:value={BB} />
+			</div>
+		</div>
 		<div class="player-postion">
 			<div class="player-selection">
 				<h2>Players</h2>
@@ -287,23 +296,21 @@
 		<!--  CCCCCCC   AA    AA  RR    RR  DDDDDD    SSSSSSS  -->
 	{:else if step === 3}
 		<div>
-			<div class="position-player-info">
-				<div class="text-box" on:click={goToPositionAndPlayerScreen}>
-					{position} | {playerCount}
-				</div>
+			<div class="gotoPage-button"> 
+				<button on:click={goToPositionAndPlayer}>{position} | {playerCount} players  {SB}/{BB}</button>
 			</div>
-			<div class="card-display">
+			<div class="entry-display">
 				<span
 					>Hand:
 					{currentHand.card1 ?? ' '}
 					{currentHand.card2 ?? ' '}
-					{currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o') : ' '}
+					{currentHand.card2 != undefined ? ((currentHand.suited === 'Suited') ? 's' : 'o') : ' '}
 				</span>
 			</div>
 			<div class="cards-suited">
-				<span>Suited:</span>
+				<!-- <span>Suited:</span> -->
 				<button class={currentHand.suited ? 'active' : ''} on:click={toggleSuited}>
-					{currentHand.suited ? 'Yes' : 'No'}
+					{currentHand.suited ? 'Suited' : 'Offsuit'}
 				</button>
 			</div>
 			<!-- Card Grid -->
@@ -324,33 +331,54 @@
 		<!-- AA    AA    CCCCCCC     TT     IIIIIIII   OOOOOO   NN    NN -->
 	{:else if step === 4}
 		<div>
-			<!-- <p>ACTION</p> -->
-			<div class="position-player-info">
-				<div class="text-box" on:click={goToPositionAndPlayerScreen}>
-					{position} | {playerCount}
-				</div>
-			</div>
-			<div class="position-player-info">
-				<div class="text-box" on:click={goToCardSelectionScreen}>
+
+			<div class="gotoPage-button"> 
+				<button on:click={goToPositionAndPlayer}>{position} | {playerCount} players  {SB}/{BB}</button>
+				<button on:click={goToCardSelection}>
 					{currentHand.card1 ?? ' '}
 					{currentHand.card2 ?? ' '}
 					{currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o') : ' '}
-				</div>
+				</button>
 			</div>
-			<div class="toCall">
-				<label for="toCall">To call:</label>
-				<input id="toCall" type="text" bind:value={toCall} />
+			<div class="entry-display">
+				<span
+					>To call: {toCall}, {myAction}
+				</span>
+			</div>
+
+			<div class="side-by-side">
+					<label for="toCall">To call:</label>
+					<input id="toCall" type="text" bind:value={toCall} />
 			</div>
 			<div class="action">
-				<span>Action:</span>
 				{#each actions as action}
 					<button on:click={() => handleAction(action)}>{action}</button>
 				{/each}
 			</div>
-
+			<div class="side-by-side">
+				<label for="raise-amount">Raise amount:</label>
+				<input id="raise-amount" type="text" bind:value={raiseAmount} />
+			</div>
 			<div class="confirm">
 				<button class="confirm-button" on:click={confirmAction}>Confirm</button>
 			</div>
+		</div>
+
+	{:else if step === 5}
+		<!-- RRRRRRR    EEEEEEEE   SSSSSSS  UU    UU  LL        TTTTTTTT -->						
+		<!-- RR    RR   EE        SS        UU    UU  LL           TT    -->						
+		<!-- RRRRRRR    EEEEEE     SSSSSS   UU    UU  LL           TT    -->						
+		<!-- RR   RR    EE              SS  UU    UU  LL           TT    -->						
+		<!-- RR    RR   EEEEEEEE  SSSSSSS    UUUUUU   LLLLLLLL     TT    -->						
+
+		<div class="gotoPage-button"> 
+			<button on:click={goToPositionAndPlayer}>{position} | {playerCount} players  {SB}/{BB}</button>
+			<button on:click={goToCardSelection}>
+				{currentHand.card1 ?? ' '}
+				{currentHand.card2 ?? ' '}
+				{currentHand.card2 != undefined ? (currentHand.suited ? 's' : 'o') : ' '}
+			</button>
+			<button on:click={goToAction}>To call: {toCall}, {myAction}</button>
 		</div>
 
 		<!-- HH    HH   IIIIIIII   SSSSSSS  TTTTTTTT   OOOOOO   RRRRRRR   YY    YY -->
@@ -358,7 +386,7 @@
 		<!-- HHHHHHHH      II      SSSSSS      TT     OO    OO  RRRRRRR     YYYY   -->
 		<!-- HH    HH      II           SS     TT     OO    OO  RR   RR      YY    -->
 		<!-- HH    HH   IIIIIIII  SSSSSSS      TT      OOOOOO   RR    RR     YY    -->
-	{:else if step === 5}
+	{:else if step === 6}
 		<div>
 			{#each handHistory as hand}
 				<div class="card-info">
@@ -368,7 +396,7 @@
 					</div>
 				</div>
 			{/each}
-			<button class="confirm-button" on:click={goToCardSelectionScreen}>Add Another Hand</button>
+			<button class="confirm-button" on:click={goToCardSelection}>Add Another Hand</button>
 		</div>
 	{/if}
 </div>
@@ -400,7 +428,17 @@
 		background-color: #f8f9fa;
 		color: #007bff;
 		cursor: pointer;
+        padding: 20px;
+        margin-right: 5px;
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
 		width: 100%;
+	}
+
+	.container button:hover {
+		background-color: #007bff;
+		color: #f8f9fa;
 	}
 
 	.container label {
@@ -451,6 +489,33 @@
         color: #000000;
     }
 
+	.gotoPage-button button{
+        background-color: #829807;
+        color: #000000;
+	}
+
+	.entry-display {
+		font-size: 24px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		background-color: #ce9e52;
+		margin-bottom: 20px;
+		cursor: pointer;
+		text-align: center;
+		padding: 20px;
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+	}
+
+    .inline {
+        display: flex;
+        justify-content: space-between;
+		display: inline;
+		clear: both;
+    }
+
 	/* PPPPPPP     OOOOOO    SSSSSSS  IIIIIIII  TTTTTTTT  IIIIIIII   OOOOOO   NN    NN */
 	/* PP    PP   OO    OO  SS           II        TT        II     OO    OO  NNN   NN */
 	/* PPPPPPPP   OO    OO   SSSSSS      II        TT        II     OO    OO  NN NN NN */
@@ -462,12 +527,6 @@
 		gap: 20px;
 	}
 
-	.position-selection button.active,
-	.player-selection button.active {
-		background-color: #007bff;
-		color: #fff;
-	}
-
 	/*  CCCCCCC      AA     RRRRRRR   DDDDDD     SSSSSSS */
 	/* CC          AA  AA   RR    RR  DD    DD  SS       */
 	/* CC         AAAAAAAA  RRRRRRR   DD    DD   SSSSSS  */
@@ -475,89 +534,8 @@
 	/*  CCCCCCC   AA    AA  RR    RR  DDDDDD    SSSSSSS  */
 	.card-grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		/* display: inline-table; */
+		grid-template-columns: repeat(4, auto);
 		gap: 10px;
 	}
-
-	/* .card-grid button {
-        padding: 20px;
-        font-size: 24px;
-        border: 1px solid #007bff;
-        border-radius: 4px;
-        background-color: #f8f9fa;
-        color: #007bff;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .card-grid button:hover{
-        background-color: #007bff;
-        color: #fff;
-    } */
-
-	/* .card-display {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-        align-items: center;
-        text-align: center;
-        background-color: #90EE90;
-        width: 100%;
-    }
-
-
-    .card-info span {
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .card-display span {
-        font-size: 24px;
-        margin-right: 10px;
-    }
-
-    .card-display .undo-button {
-        margin-left: 20px;
-        background-color: #f8f9fa;
-        border: 1px solid #ccc;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    .card-display .undo-button:hover {
-        background-color: #e2e6ea;
-    }
-
-.cards-suited {
-    margin-bottom: 20px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.cards-suited span {
-    margin-right: 10px;
-}
-
-.cards-suited button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-    color: #007bff;
-    cursor: pointer;
-}
-
-.cards-suited button.active {
-    background-color: #007bff;
-    color: #fff;
-} */
 </style>
